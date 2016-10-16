@@ -1,6 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class KnapsackSolver {
+interface KnapsackSolver {
 
+    fun solve(problemInstance: Problem): Knapsack?
 
 }

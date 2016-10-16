@@ -9,7 +9,7 @@ class Item(val itemIndex: Int, val problemInstance: Problem) {
         get() = problemInstance.itemWeights[itemIndex]
 
     override fun toString(): String {
-        return "$value V / $weight W ($itemIndex)"
+        return "$value V/ $weight W"
     }
 
 }

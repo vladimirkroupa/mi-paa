@@ -3,6 +3,7 @@ package com.github.vladimirkroupa.paa.knapsack
 class Problem(val knapsackCapacity: Int, val itemWeights: List<Int>, val itemValues: List<Int>) {
 
     val items: Array<Item>
+    var best: Knapsack? = null
 
     init {
         if (itemWeights.size != itemValues.size) {
@@ -22,8 +23,13 @@ class Problem(val knapsackCapacity: Int, val itemWeights: List<Int>, val itemVal
     }
 
     fun doSolve(knapsack: Knapsack) {
+        if (best == null || knapsack.totalValue > best!!.totalValue) {
+            best = knapsack
+        }
+
         val padding: String = knapsack.itemsInside.fold("", {acc, i -> acc + "  "})
         println("$padding$knapsack")
+
         knapsack.getRemainingItemsFrom(knapsack.lastItemIndex).forEach { item ->
             if (knapsack.hasRoomFor(item)) {
                 val knapsackWithItem = Knapsack(knapsack)
@@ -37,4 +43,6 @@ class Problem(val knapsackCapacity: Int, val itemWeights: List<Int>, val itemVal
 fun main(args: Array<String>) {
     val p9000 = Problem(100, listOf(18, 42, 88, 3), listOf(114, 136, 192, 223))
     p9000.solve()
+    println()
+    println("Solution: ${p9000.best}")
 }

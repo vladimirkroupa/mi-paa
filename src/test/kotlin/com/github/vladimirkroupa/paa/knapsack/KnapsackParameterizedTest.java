@@ -49,7 +49,7 @@ public class KnapsackParameterizedTest {
     public void solutionEqualToExpected() {
         assumeThat(instance.getItemCount(), equalTo(expectedSolution.getProblemSize()));
 
-        KnapsackSolver solver = new HeuristicSolver();
+        KnapsackSolver solver = new BruteforceSolver();
         Knapsack solution = solver.solve(instance);
         assertNotNull(solution);
 

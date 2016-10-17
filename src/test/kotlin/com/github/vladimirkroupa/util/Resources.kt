@@ -1,4 +1,4 @@
-package com.github.vladimirkroupa.paa.knapsack.util
+package com.github.vladimirkroupa.util
 
 import java.io.File
 

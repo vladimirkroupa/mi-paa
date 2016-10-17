@@ -1,8 +1,5 @@
 package com.github.vladimirkroupa.paa.knapsack;
 
-import com.github.vladimirkroupa.paa.knapsack.util.InstanceFileParser;
-import com.github.vladimirkroupa.paa.knapsack.util.Solution;
-import com.github.vladimirkroupa.paa.knapsack.util.SolutionFileParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

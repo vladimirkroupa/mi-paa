@@ -1,4 +1,6 @@
-package com.github.vladimirkroupa.paa.knapsack.util
+package com.github.vladimirkroupa.paa.knapsack
+
+import com.github.vladimirkroupa.util.Resources
 
 class SolutionFileParser {
 

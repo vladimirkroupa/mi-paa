@@ -1,4 +1,4 @@
-package com.github.vladimirkroupa.paa.knapsack.util
+package com.github.vladimirkroupa.util
 
 fun <T> Collection<T>.pairwise(): Pair<List<T>, List<T>> {
     if (size % 2 != 0) {

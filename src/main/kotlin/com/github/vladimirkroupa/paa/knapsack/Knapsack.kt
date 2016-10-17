@@ -1,6 +1,6 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class Knapsack(val problemInstance: Problem,
+class Knapsack(private val problemInstance: Problem,
                private val items: BooleanArray = BooleanArray(problemInstance.itemCount, { false })) {
 
     constructor(knapsack: Knapsack) : this(knapsack.problemInstance, knapsack.items.clone())
@@ -19,6 +19,9 @@ class Knapsack(val problemInstance: Problem,
 
     val lastItemIndex: Int
         get() = items.lastIndexOf(true)
+
+    val remainingItems: Iterable<Item>
+        get() = problemInstance.items.filterIndexed { i, item -> (items[i] == false) }
 
     fun getRemainingItemsFrom(fromIndex: Int): Iterable<Item>
         = problemInstance.items.filterIndexed { i, item -> (i >= fromIndex) and (items[i] == false) }

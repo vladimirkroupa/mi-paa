@@ -36,6 +36,11 @@ class Knapsack(private val problemInstance: Problem,
         items[item.itemIndex] = true
     }
 
+    fun printStep(): String {
+        val padding: String = itemsInside.fold("", { acc, i -> acc + "  " })
+        return "$padding$this"
+    }
+
     override fun toString(): String {
         val flagArray = items.toList().map({ flag -> if (flag) 1 else 0 }).joinToString(separator = " ")
         return "[$flagArray] : ${totalValue} ∑(V) / ${totalWeight} ∑(W)"

@@ -16,8 +16,7 @@ class BruteforceSolver : KnapsackSolver {
             best = knapsack
         }
 
-        val padding: String = knapsack.itemsInside.fold("", {acc, i -> acc + "  "})
-        println("$padding$knapsack")
+        println(knapsack.printStep())
 
         knapsack.getRemainingItemsFrom(knapsack.lastItemIndex).forEach { item ->
             if (knapsack.hasRoomFor(item)) {

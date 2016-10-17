@@ -17,7 +17,7 @@ class InstanceFileParser {
         val capacity = cols[2].toInt()
         val items = cols.subList(3, cols.size).map { str -> str.toInt() }.pairwise()
         val weights = items.first
-        val values = items.first
+        val values = items.second
         if (weights.size != size || values.size != size) {
             throw IllegalArgumentException("$size = ${weights.size} = ${values.size} does not hold.")
         }

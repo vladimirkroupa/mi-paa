@@ -8,7 +8,7 @@ class HeuristicSolver : KnapsackSolver {
     }
 
     private fun doSolve(knapsack: Knapsack): Knapsack {
-        println(knapsack.printStep())
+        //println(knapsack.printStep())
 
         val itemsByRatio = knapsack.remainingItems.sortedByDescending(Item::valueToWeightRatio)
         val bestFittingItem = itemsByRatio.firstOrNull { item ->

@@ -16,7 +16,7 @@ class BruteforceSolver : KnapsackSolver {
             best = knapsack
         }
 
-        println(knapsack.printStep())
+        //println(knapsack.printStep())
 
         knapsack.getRemainingItemsFrom(knapsack.lastItemIndex).forEach { item ->
             if (knapsack.hasRoomFor(item)) {

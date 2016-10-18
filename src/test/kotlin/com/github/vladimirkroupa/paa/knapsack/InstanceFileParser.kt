@@ -1,6 +1,5 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-import com.github.vladimirkroupa.paa.knapsack.Problem
 import com.github.vladimirkroupa.util.Resources
 import com.github.vladimirkroupa.util.pairwise
 

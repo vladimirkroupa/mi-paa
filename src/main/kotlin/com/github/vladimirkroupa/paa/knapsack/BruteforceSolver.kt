@@ -5,7 +5,6 @@ class BruteforceSolver : KnapsackSolver {
     var best: Knapsack? = null
 
     override fun solve(problemInstance: Problem): Knapsack? {
-        best = null
         val knapsack = Knapsack(problemInstance)
         doSolve(knapsack)
         return best

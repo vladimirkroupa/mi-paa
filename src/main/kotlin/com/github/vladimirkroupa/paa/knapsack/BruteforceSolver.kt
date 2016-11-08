@@ -1,10 +1,10 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class BruteforceSolver : KnapsackSolver {
+class BruteforceSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
     var best: Knapsack? = null
 
-    override fun solve(problemInstance: Problem): Knapsack? {
+    override fun solve(): Knapsack? {
         val knapsack = Knapsack(problemInstance)
         doSolve(knapsack)
         return best

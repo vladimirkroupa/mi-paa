@@ -1,7 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-interface KnapsackSolver {
+abstract class KnapsackSolver(protected val problemInstance: Problem) {
 
-    fun solve(problemInstance: Problem): Knapsack?
+    abstract fun solve(): Knapsack?
 
 }

@@ -9,7 +9,6 @@ class Measurement {
     @Test
     fun measureHeuristicErr() {
         val data = prepareTestData(27)
-        val solver = HeuristicSolver()
 
         var totalRelErr = 0.0
         var maxRelErr = Double.MIN_VALUE
@@ -17,7 +16,8 @@ class Measurement {
         data.forEach { pair ->
             val optimalValue = pair.second.value
 
-            val solution: Knapsack? = solver.solve(pair.first)
+            val solver = HeuristicSolver(pair.first)
+            val solution: Knapsack? = solver.solve()
 
             val absoluteError = optimalValue - (solution!!.totalValue)
             val relativeError = absoluteError.toDouble() / optimalValue
@@ -37,7 +37,7 @@ class Measurement {
     @Test
     fun measureHeuristic() {
         val data = prepareTestData(40)
-        val solver = HeuristicSolver()
+
 
         var minInstMs = Double.MAX_VALUE
         var maxInstMs = Double.MIN_VALUE
@@ -51,7 +51,8 @@ class Measurement {
             val startInst = Instant.now()
             var solution: Knapsack? = null
             for (i in (1..repeat)) {
-                solution = solver.solve(pair.first)
+                val solver = HeuristicSolver(pair.first)
+                solution = solver.solve()
             }
 
             val endInst = Instant.now()
@@ -75,7 +76,6 @@ class Measurement {
     @Test
     fun measureBruteForce() {
         val data = prepareTestData(10)
-        val solver = BruteforceSolver()
 
         var minInstMs = Double.MAX_VALUE
         var maxInstMs = Double.MIN_VALUE
@@ -86,7 +86,8 @@ class Measurement {
         data.forEach { pair ->
             val startInst = Instant.now()
             for (i in (1..repeat)) {
-                solver.solve(pair.first)
+                val solver = BruteforceSolver(pair.first)
+                solver.solve()
             }
             val endInst = Instant.now()
             val durationInst = Duration.between(startInst, endInst).toMillis().toDouble() / repeat

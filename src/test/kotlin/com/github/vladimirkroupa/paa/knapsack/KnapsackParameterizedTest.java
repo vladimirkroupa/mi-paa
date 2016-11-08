@@ -46,8 +46,8 @@ public class KnapsackParameterizedTest {
     public void solutionEqualToExpected() {
         assumeThat(instance.getItemCount(), equalTo(expectedSolution.getProblemSize()));
 
-        KnapsackSolver solver = new BruteforceSolver();
-        Knapsack solution = solver.solve(instance);
+        KnapsackSolver solver = new BruteforceSolver(instance);
+        Knapsack solution = solver.solve();
         assertNotNull(solution);
 
         assertThat("Test id " + expectedSolution.getId() + " failed.", solution.getTotalValue(), equalTo(expectedSolution.getValue()));

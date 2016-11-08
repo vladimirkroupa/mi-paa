@@ -1,8 +1,8 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class HeuristicSolver : KnapsackSolver {
+class HeuristicSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    override fun solve(problemInstance: Problem): Knapsack? {
+    override fun solve(): Knapsack? {
         val knapsack = Knapsack(problemInstance)
         return doSolve(knapsack)
     }

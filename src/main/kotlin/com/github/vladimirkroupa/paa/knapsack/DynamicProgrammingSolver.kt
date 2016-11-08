@@ -1,11 +1,11 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
+class BranchAndBoundSolver : KnapsackSolver {
 
     var best: Knapsack? = null
     var incumbent: Int = Int.MIN_VALUE
 
-    override fun solve(): Knapsack? {
+    override fun solve(problemInstance: Problem): Knapsack? {
         val knapsack = Knapsack(problemInstance)
         doSolve(knapsack)
         return best

@@ -24,12 +24,18 @@ class Knapsack(private val problemInstance: Problem,
         get() = problemInstance.items.filterIndexed { i, item -> (items[i] == false) }
 
     fun getRemainingItemsFrom(fromIndex: Int): Iterable<Item>
-        = problemInstance.items.filterIndexed { i, item -> (i >= fromIndex) and (items[i] == false) }
+            = problemInstance.items.filterIndexed { i, item -> (i >= fromIndex) and (items[i] == false) }
 
     fun hasRoomFor(item: Item): Boolean
             = item.weight <= (capacity - totalWeight)
 
-    fun add(item: Item) {
+    fun add(item: Item): Knapsack {
+        val copy = Knapsack(this)
+        copy._add(item)
+        return copy
+    }
+
+    private fun _add(item: Item) {
         if (items[item.itemIndex]) {
             throw IllegalArgumentException("Item $item already in knapsack.")
         }

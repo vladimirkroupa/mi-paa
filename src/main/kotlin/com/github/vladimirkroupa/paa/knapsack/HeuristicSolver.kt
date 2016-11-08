@@ -15,8 +15,7 @@ class HeuristicSolver : KnapsackSolver {
             knapsack.hasRoomFor(item)
         }
         if (bestFittingItem != null) {
-            val knapsackWithItem = Knapsack(knapsack)
-            knapsackWithItem.add(bestFittingItem)
+            val knapsackWithItem = knapsack.add(bestFittingItem)
             return doSolve(knapsackWithItem)
         } else {
             return knapsack

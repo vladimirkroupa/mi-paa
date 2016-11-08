@@ -20,8 +20,7 @@ class BruteforceSolver : KnapsackSolver {
 
         knapsack.getRemainingItemsFrom(knapsack.lastItemIndex).forEach { item ->
             if (knapsack.hasRoomFor(item)) {
-                val knapsackWithItem = Knapsack(knapsack)
-                knapsackWithItem.add(item)
+                val knapsackWithItem = knapsack.add(item)
                 doSolve(knapsackWithItem)
             }
         }

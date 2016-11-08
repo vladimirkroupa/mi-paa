@@ -2,16 +2,16 @@ package com.github.vladimirkroupa.paa.knapsack
 
 class BruteforceSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    var best: Knapsack? = null
+    var best: Knapsack = Knapsack(problemInstance)
 
-    override fun solve(): Knapsack? {
+    override fun solve(): Knapsack {
         val knapsack = Knapsack(problemInstance)
         doSolve(knapsack)
         return best
     }
 
     private fun doSolve(knapsack: Knapsack) {
-        if (best == null || knapsack.totalValue > best!!.totalValue) {
+        if (knapsack.totalValue > best.totalValue) {
             best = knapsack
         }
 

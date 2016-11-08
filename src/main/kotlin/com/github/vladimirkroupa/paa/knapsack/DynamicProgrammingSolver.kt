@@ -20,7 +20,7 @@ class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(proble
         for (i in (1..problemInstance.itemCount)) {
             for (w in (0..problemInstance.knapsackCapacity)) {
                 val itemI = problemInstance.items[i - 1]
-                if (itemI.weight < w) { // does item fit in
+                if (itemI.weight <= w) { // does item fit in?
                     val smallerKnapsack = knapsackVals[i - 1][w - itemI.weight]
                     val withoutItem = knapsackVals[i - 1][w]
                     val smallerKwithItem = itemI.value + smallerKnapsack

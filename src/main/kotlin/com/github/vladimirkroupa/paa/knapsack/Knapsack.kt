@@ -31,16 +31,26 @@ class Knapsack(private val problemInstance: Problem,
 
     fun add(item: Item): Knapsack {
         val copy = Knapsack(this)
-        copy._add(item)
+        copy._add(item.itemIndex)
         return copy
     }
 
-    private fun _add(item: Item) {
-        if (items[item.itemIndex]) {
-            throw IllegalArgumentException("Item $item already in knapsack.")
-        }
-        items[item.itemIndex] = true
+    fun add(itemNo: Int): Knapsack {
+        val copy = Knapsack(this)
+        copy._add(itemNo - 1)
+        return copy
     }
+
+    private fun _add(itemIndex: Int) {
+        if (itemIndex !in items.indices) {
+            throw IllegalArgumentException("Invalid item index $itemIndex")
+        }
+        if (items[itemIndex]) {
+            throw IllegalArgumentException("Item ${items[itemIndex]} already in knapsack.")
+        }
+        items[itemIndex] = true
+    }
+
 
     fun printStep(): String {
         val padding: String = itemsInside.fold("", { acc, i -> acc + "  " })

@@ -1,35 +1,53 @@
 package com.github.vladimirkroupa.paa.knapsack
 
-class BranchAndBoundSolver : KnapsackSolver {
+/**
+ * http://cse.unl.edu/~goddard/Courses/CSCE310J/Lectures/Lecture8-DynamicProgramming.pdf
+ */
+class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    var best: Knapsack? = null
-    var incumbent: Int = Int.MIN_VALUE
+    var knapsackVals: Array<IntArray>
 
-    override fun solve(problemInstance: Problem): Knapsack? {
-        val knapsack = Knapsack(problemInstance)
-        doSolve(knapsack)
-        return best
+    init {
+        knapsackVals = Array(problemInstance.itemCount + 1, { i -> IntArray(problemInstance.knapsackCapacity + 1, { 0 }) })
     }
 
-    private fun doSolve(knapsack: Knapsack) {
-        //println(knapsack.printStep())
-        knapsack.remainingItems.forEach { item ->
-            if (knapsack.hasRoomFor(item)) {
-                val knapsackWithItem = knapsack.add(item)
+    override fun solve(): Knapsack {
+        computeTable()
+        return itemsFromTable()
+    }
 
-                val upperBound = computeUpperBound(knapsackWithItem)
-                if (upperBound > incumbent) {
-                    incumbent = knapsackWithItem.totalValue
-                    best = knapsackWithItem
-                    doSolve(knapsackWithItem)
+    fun computeTable() {
+        for (i in (1..problemInstance.itemCount)) {
+            for (w in (0..problemInstance.knapsackCapacity)) {
+                val itemI = problemInstance.items[i - 1]
+                if (itemI.weight < w) { // does item fit in
+                    val smallerKnapsack = knapsackVals[i - 1][w - itemI.weight]
+                    val withoutItem = knapsackVals[i - 1][w]
+                    val smallerKwithItem = itemI.value + smallerKnapsack
+                    if (smallerKwithItem > withoutItem) {
+                        knapsackVals[i][w] = itemI.value + knapsackVals[i - 1][w - itemI.weight]
+                    } else {
+                        knapsackVals[i][w] = knapsackVals[i - 1][w]
+                    }
+                } else { // item does not fit in
+                    knapsackVals[i][w] = knapsackVals[i - 1][w]
                 }
             }
         }
+        println(knapsackVals[problemInstance.itemCount][problemInstance.knapsackCapacity])
     }
 
-    private fun computeUpperBound(knapsack: Knapsack): Int {
-        val remaningItemsValue = knapsack.getRemainingItemsFrom(knapsack.lastItemIndex).fold(0, { acc, item -> acc + item.value })
-        return knapsack.totalValue + remaningItemsValue
+    fun itemsFromTable(): Knapsack {
+        var knapsack = Knapsack(problemInstance)
+        var k = problemInstance.knapsackCapacity
+        for (i in problemInstance.itemCount downTo 1) {
+            if (knapsackVals[i][k] != knapsackVals[i - 1][k]) {
+                knapsack = knapsack.add(i)
+                val itemWeight = problemInstance.items[i - 1].weight
+                k -= itemWeight
+            }
+        }
+        return knapsack
     }
 
 }

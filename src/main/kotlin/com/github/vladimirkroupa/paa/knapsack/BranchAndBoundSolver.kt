@@ -18,7 +18,7 @@ class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemIns
                 val knapsackWithItem = knapsack.add(item)
 
                 val upperBound = computeUpperBound(knapsackWithItem)
-                if (upperBound > incumbent) {
+                if (upperBound > incumbent && knapsackWithItem.totalValue > best.totalValue) {
                     incumbent = knapsackWithItem.totalValue
                     best = knapsackWithItem
                     doSolve(knapsackWithItem)

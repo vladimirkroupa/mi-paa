@@ -1,4 +1,7 @@
-package com.github.vladimirkroupa.paa.knapsack
+package com.github.vladimirkroupa.paa.knapsack.solver
+
+import com.github.vladimirkroupa.paa.knapsack.Knapsack
+import com.github.vladimirkroupa.paa.knapsack.Problem
 
 /**
  * http://cse.unl.edu/~goddard/Courses/CSCE310J/Lectures/Lecture8-DynamicProgramming.pdf
@@ -19,7 +22,7 @@ class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(proble
     fun computeTable() {
         for (i in (1..problemInstance.itemCount)) {
             for (w in (0..problemInstance.knapsackCapacity)) {
-                val itemI = problemInstance.items[i - 1]
+                val itemI = problemInstance.getItem(i)
                 if (itemI.weight <= w) { // does item fit in?
                     val smallerKnapsack = knapsackVals[i - 1][w - itemI.weight]
                     val withoutItem = knapsackVals[i - 1][w]
@@ -43,7 +46,7 @@ class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(proble
         for (i in problemInstance.itemCount downTo 1) {
             if (knapsackVals[i][k] != knapsackVals[i - 1][k]) {
                 knapsack = knapsack.add(i)
-                val itemWeight = problemInstance.items[i - 1].weight
+                val itemWeight = problemInstance.getItem(i).weight
                 k -= itemWeight
             }
         }

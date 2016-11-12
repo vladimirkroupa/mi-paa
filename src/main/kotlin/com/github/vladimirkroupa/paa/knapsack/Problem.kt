@@ -16,6 +16,9 @@ class Problem(val knapsackCapacity: Int, val itemWeights: List<Int>, val itemVal
     val itemCount: Int
         get() = items.size
 
+    fun getItem(itemNo: Int)
+            = items[itemNo - 1]
+
     override fun toString(): String {
         val itemString = items.joinToString(separator = ", ")
         return "Capacity: $knapsackCapacity, items: [$itemString]"

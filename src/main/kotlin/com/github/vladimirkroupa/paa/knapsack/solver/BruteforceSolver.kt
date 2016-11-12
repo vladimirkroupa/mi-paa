@@ -1,4 +1,7 @@
-package com.github.vladimirkroupa.paa.knapsack
+package com.github.vladimirkroupa.paa.knapsack.solver
+
+import com.github.vladimirkroupa.paa.knapsack.Knapsack
+import com.github.vladimirkroupa.paa.knapsack.Problem
 
 class BruteforceSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 

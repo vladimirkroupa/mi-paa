@@ -1,4 +1,8 @@
-package com.github.vladimirkroupa.paa.knapsack
+package com.github.vladimirkroupa.paa.knapsack.solver
+
+import com.github.vladimirkroupa.paa.knapsack.Item
+import com.github.vladimirkroupa.paa.knapsack.Knapsack
+import com.github.vladimirkroupa.paa.knapsack.Problem
 
 class HeuristicSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 

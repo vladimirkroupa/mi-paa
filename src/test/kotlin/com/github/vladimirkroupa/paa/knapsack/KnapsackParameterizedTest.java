@@ -1,5 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack;
 
+import com.github.vladimirkroupa.paa.knapsack.solver.BruteforceSolver;
+import com.github.vladimirkroupa.paa.knapsack.solver.KnapsackSolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

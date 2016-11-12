@@ -1,5 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack
 
+import com.github.vladimirkroupa.paa.knapsack.solver.BranchAndBoundSolver
+
 fun main(args: Array<String>) {
     val p9000 = Problem(100, listOf(18, 42, 88, 3), listOf(114, 136, 192, 223))
     println(p9000)

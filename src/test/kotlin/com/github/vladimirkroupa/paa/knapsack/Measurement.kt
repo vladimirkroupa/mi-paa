@@ -1,5 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack
 
+import com.github.vladimirkroupa.paa.knapsack.solver.BruteforceSolver
+import com.github.vladimirkroupa.paa.knapsack.solver.HeuristicSolver
 import org.junit.Test
 import java.time.Duration
 import java.time.Instant

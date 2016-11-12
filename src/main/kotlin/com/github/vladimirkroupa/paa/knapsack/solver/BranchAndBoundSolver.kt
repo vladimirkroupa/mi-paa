@@ -12,45 +12,42 @@ import java.util.*
  */
 class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    private val unprocessedNodesSortedByUpperBound: SortedSet<Node>
-
     private val itemOrderingByValueWeightRatio: SortedSet<Item>
 
     init {
-        unprocessedNodesSortedByUpperBound = sortedSetOf(java.util.Comparator.comparingInt { node -> node.upperBound })
-        itemOrderingByValueWeightRatio = problemInstance.items.toSortedSet(java.util.Comparator.comparingDouble { item -> item.valueToWeightRatio })
+        itemOrderingByValueWeightRatio = problemInstance.items.toSortedSet(Collections.reverseOrder(java.util.Comparator.comparingDouble { item -> item.valueToWeightRatio }))
     }
 
     override fun solve(): Knapsack {
-        val solution = findSolutionNode()
-        return if (solution != null) solution.knapsack else Knapsack(problemInstance)
+        val boundingFunction = ItemFractionsBoundingFunction(itemOrderingByValueWeightRatio)
+        val initial = Node(1, Knapsack(problemInstance), boundingFunction)
+        val solution = findSolutionNode(initial)
+        return solution!!.knapsack
     }
 
-    private fun findSolutionNode(): Node? {
-        val boundingFunction = ItemFractionsBoundingFunction(itemOrderingByValueWeightRatio)
-
-        val initial = Node(1, Knapsack(problemInstance), boundingFunction)
-        unprocessedNodesSortedByUpperBound.add(initial)
-
-        val nodeIterator = unprocessedNodesSortedByUpperBound.iterator()
-        while (nodeIterator.hasNext()) {
-            val node = nodeIterator.next()!!
-
-            if (node.isOptimalSolution()) {
-                return node
-            }
-            val pivot = selectPivotItem(node)
-            val pivotExcluded = node.exclude(pivot)
-            val pivotIncluded = node.include(pivot)
-            unprocessedNodesSortedByUpperBound.add(pivotExcluded)
-            unprocessedNodesSortedByUpperBound.add(pivotIncluded)
+    private fun findSolutionNode(node: Node): Node? {
+        if (node.upperBound < 0) {
+            return null
         }
-        // no solution
-        return null
+        if (node.isOptimalSolution()) {
+            if (node.knapsack.totalWeight >= node.knapsack.capacity) {
+                return null
+            }
+            return node
+        }
+        val pivot = selectPivotItem(node)
+        val pivotIncluded = node.include(pivot)
+        val fromIncluded = findSolutionNode(pivotIncluded)
+        if (fromIncluded != null) {
+            return fromIncluded
+        } else {
+            val pivotExcluded = node.exclude(pivot)
+            return findSolutionNode(pivotExcluded)
+        }
     }
 
     private fun selectPivotItem(node: Node): Item
-        = itemOrderingByValueWeightRatio.first { item -> ! node.knapsack.contains(item) }
+        = itemOrderingByValueWeightRatio.first { item -> ! node.knapsack.contains(item) && ! node.excludedItems.contains(item) }
 
 }
 

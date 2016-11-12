@@ -6,10 +6,10 @@ import com.github.vladimirkroupa.paa.knapsack.Knapsack
 class Node(private val nodeNumber: Int,
            internal val knapsack: Knapsack,
            private val boundingFunction: BoundingFunction,
-           private val excludedItems: Set<Item> = setOf()) {
+           val excludedItems: Set<Item> = setOf()) {
 
     fun include(item: Item) = Node(
-            this.nodeNumber + 1,
+            this.nodeNumber + 2,
             Knapsack(this.knapsack.add(item)),
             boundingFunction,
             this.excludedItems)
@@ -36,5 +36,8 @@ class Node(private val nodeNumber: Int,
 
     override fun hashCode(): Int
             = nodeNumber
+
+    override fun toString(): String
+        = "$nodeNumber: $upperBound"
 
 }

@@ -1,5 +1,6 @@
 package com.github.vladimirkroupa.paa.knapsack;
 
+import com.github.vladimirkroupa.paa.knapsack.solver.BranchAndBoundSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.BruteforceSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.KnapsackSolver;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class KnapsackParameterizedTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        int problemSize = 4;
+        int problemSize = 7;
         List<Problem> instances = new InstanceFileParser().readInstanceFile(problemSize);
         List<Solution> solutions = new SolutionFileParser().readSolutionFile(problemSize);
 
@@ -48,7 +49,7 @@ public class KnapsackParameterizedTest {
     public void solutionEqualToExpected() {
         assumeThat(instance.getItemCount(), equalTo(expectedSolution.getProblemSize()));
 
-        KnapsackSolver solver = new BruteforceSolver(instance);
+        KnapsackSolver solver = new BranchAndBoundSolver(instance);
         Knapsack solution = solver.solve();
         assertNotNull(solution);
 

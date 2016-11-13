@@ -1,5 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack
 
+import java.util.*
+
 class Knapsack(internal val problemInstance: Problem,
                private val items: BooleanArray = BooleanArray(problemInstance.itemCount, { false })) {
 
@@ -69,6 +71,21 @@ class Knapsack(internal val problemInstance: Problem,
     override fun toString(): String {
         val flagArray = items.toList().map({ flag -> if (flag) 1 else 0 }).joinToString(separator = " ")
         return "[$flagArray] : ${totalValue} ∑(V) / ${totalWeight} ∑(W)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Knapsack
+
+        if (!Arrays.equals(items, other.items)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return Arrays.hashCode(items)
     }
 
 }

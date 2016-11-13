@@ -12,15 +12,15 @@ import java.util.*
  */
 class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    private val itemOrderingByValueWeightRatio: SortedSet<Item>
+    private val itemOrderingByValueWeightRatio: List<Item>
 
     init {
-        itemOrderingByValueWeightRatio = problemInstance.items.toSortedSet(Collections.reverseOrder(java.util.Comparator.comparingDouble { item -> item.valueToWeightRatio }))
+        itemOrderingByValueWeightRatio = problemInstance.items.sortedWith(Collections.reverseOrder(java.util.Comparator.comparingDouble { item -> item.valueToWeightRatio }))
     }
 
     override fun solve(): Knapsack {
         val boundingFunction = ItemFractionsBoundingFunction(itemOrderingByValueWeightRatio)
-        val initial = Node(1, Knapsack(problemInstance), boundingFunction)
+        val initial = Node(Knapsack(problemInstance), boundingFunction)
         val solution = findSolutionNode(initial)
         return solution!!.knapsack
     }
@@ -30,7 +30,7 @@ class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemIns
             return null
         }
         if (node.isOptimalSolution()) {
-            if (node.knapsack.totalWeight >= node.knapsack.capacity) {
+            if (node.knapsack.totalWeight > node.knapsack.capacity) {
                 return null
             }
             return node
@@ -47,7 +47,7 @@ class BranchAndBoundSolver(problemInstance: Problem) : KnapsackSolver(problemIns
     }
 
     private fun selectPivotItem(node: Node): Item
-        = itemOrderingByValueWeightRatio.first { item -> ! node.knapsack.contains(item) && ! node.excludedItems.contains(item) }
+            = itemOrderingByValueWeightRatio.first { item -> !node.knapsack.contains(item) && !node.excludedItems.contains(item) }
 
 }
 

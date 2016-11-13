@@ -29,7 +29,7 @@ public class KnapsackParameterizedTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        int problemSize = 7;
+        int problemSize = 10;
         List<Problem> instances = new InstanceFileParser().readInstanceFile(problemSize);
         List<Solution> solutions = new SolutionFileParser().readSolutionFile(problemSize);
 

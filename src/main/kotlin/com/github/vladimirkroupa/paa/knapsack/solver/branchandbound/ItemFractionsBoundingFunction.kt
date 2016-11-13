@@ -3,7 +3,7 @@ package com.github.vladimirkroupa.paa.knapsack.solver.branchandbound
 import com.github.vladimirkroupa.paa.knapsack.Item
 import java.util.*
 
-class ItemFractionsBoundingFunction(private val itemsByValueWeightRatio: SortedSet<Item>) : BoundingFunction {
+class ItemFractionsBoundingFunction(private val itemsByValueWeightRatio: List<Item>) : BoundingFunction {
 
     override fun computeUpperBound(node: Node): Int {
         val knapsack = node.knapsack

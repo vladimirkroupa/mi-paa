@@ -6,9 +6,9 @@ import com.github.vladimirkroupa.paa.knapsack.Problem
 /**
  * http://cse.unl.edu/~goddard/Courses/CSCE310J/Lectures/Lecture8-DynamicProgramming.pdf
  */
-class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
+class DynamicProgrammingDecompByWeightSolver(problemInstance: Problem) : KnapsackSolver(problemInstance) {
 
-    var knapsackVals: Array<IntArray>
+    val knapsackVals: Array<IntArray>
 
     init {
         knapsackVals = Array(problemInstance.itemCount + 1, { i -> IntArray(problemInstance.knapsackCapacity + 1, { 0 }) })
@@ -37,7 +37,6 @@ class DynamicProgrammingSolver(problemInstance: Problem) : KnapsackSolver(proble
                 }
             }
         }
-        println(knapsackVals[problemInstance.itemCount][problemInstance.knapsackCapacity])
     }
 
     fun itemsFromTable(): Knapsack {

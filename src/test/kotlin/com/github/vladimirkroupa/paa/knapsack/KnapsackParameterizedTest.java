@@ -1,7 +1,7 @@
 package com.github.vladimirkroupa.paa.knapsack;
 
-import com.github.vladimirkroupa.paa.knapsack.solver.BranchAndBoundSolver;
-import com.github.vladimirkroupa.paa.knapsack.solver.BruteforceSolver;
+import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByValueSolver;
+import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByWeightSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.KnapsackSolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class KnapsackParameterizedTest {
     public void solutionEqualToExpected() {
         assumeThat(instance.getItemCount(), equalTo(expectedSolution.getProblemSize()));
 
-        KnapsackSolver solver = new BranchAndBoundSolver(instance);
+        KnapsackSolver solver = new DynamicProgrammingDecompByValueSolver(instance);
         Knapsack solution = solver.solve();
         assertNotNull(solution);
 

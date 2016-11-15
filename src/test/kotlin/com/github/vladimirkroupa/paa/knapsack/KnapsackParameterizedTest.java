@@ -2,6 +2,7 @@ package com.github.vladimirkroupa.paa.knapsack;
 
 import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByValueSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByWeightSolver;
+import com.github.vladimirkroupa.paa.knapsack.solver.FPTASSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.KnapsackSolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ public class KnapsackParameterizedTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        int problemSize = 10;
+        int problemSize = 40;
         List<Problem> instances = new InstanceFileParser().readInstanceFile(problemSize);
         List<Solution> solutions = new SolutionFileParser().readSolutionFile(problemSize);
 
@@ -49,7 +50,7 @@ public class KnapsackParameterizedTest {
     public void solutionEqualToExpected() {
         assumeThat(instance.getItemCount(), equalTo(expectedSolution.getProblemSize()));
 
-        KnapsackSolver solver = new DynamicProgrammingDecompByValueSolver(instance);
+        KnapsackSolver solver = new FPTASSolver(instance, 0.25);
         Knapsack solution = solver.solve();
         assertNotNull(solution);
 

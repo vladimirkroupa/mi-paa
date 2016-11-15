@@ -3,7 +3,7 @@ package com.github.vladimirkroupa.paa.knapsack
 import java.util.*
 
 class Knapsack(internal val problemInstance: Problem,
-               private val items: BooleanArray = BooleanArray(problemInstance.itemCount, { false })) {
+               val items: BooleanArray = BooleanArray(problemInstance.itemCount, { false })) {
 
     constructor(knapsack: Knapsack) : this(knapsack.problemInstance, knapsack.items.clone())
 

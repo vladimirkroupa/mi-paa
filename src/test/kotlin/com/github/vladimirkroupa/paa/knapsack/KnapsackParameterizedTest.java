@@ -1,7 +1,5 @@
 package com.github.vladimirkroupa.paa.knapsack;
 
-import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByValueSolver;
-import com.github.vladimirkroupa.paa.knapsack.solver.DynamicProgrammingDecompByWeightSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.FPTASSolver;
 import com.github.vladimirkroupa.paa.knapsack.solver.KnapsackSolver;
 import org.junit.Test;

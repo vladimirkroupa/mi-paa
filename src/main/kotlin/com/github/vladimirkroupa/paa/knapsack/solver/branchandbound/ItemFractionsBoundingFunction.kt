@@ -14,7 +14,7 @@ class ItemFractionsBoundingFunction(private val itemsByValueWeightRatio: List<It
         var remainingCapacity = knapsack.remainingCapacity
         var possibleItemsValue = 0.0
         for (item in itemsByValueWeightRatio) {
-            if (knapsack.contains(item)) {
+            if (knapsack.contains(item) || item in node.excludedItems) {
                 continue
             }
             if (item.weight <= remainingCapacity) {

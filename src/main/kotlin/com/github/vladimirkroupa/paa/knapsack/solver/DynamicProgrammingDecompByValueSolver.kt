@@ -35,20 +35,16 @@ class DynamicProgrammingDecompByValueSolver(problemInstance: Problem) : Knapsack
         for (i in (1..rows - 1)) {
             val item = problemInstance.getItem(i)
             for (v in (1..cols - 1)) {
-                val fewerItemsVal = knapsackWeights[i - 1][v]
                 val withoutItemCol = v - item.value
                 var withoutItemOrWith: Int
                 if (withoutItemCol < 0) {
                     withoutItemOrWith = Int.MAX_VALUE
                 } else {
-                    val withoutItemVal = knapsackWeights[i - 1][withoutItemCol]
-                    if (withoutItemVal == Int.MAX_VALUE) {
-                        withoutItemOrWith = Int.MAX_VALUE
-                    } else {
-                        withoutItemOrWith = withoutItemVal + item.weight
-                    }
+                    val weightWithoutItem = knapsackWeights[i - 1][withoutItemCol]
+                    withoutItemOrWith = if (weightWithoutItem != Int.MAX_VALUE) weightWithoutItem + item.weight else Int.MAX_VALUE
                 }
-                val newWeight = if (fewerItemsVal < withoutItemOrWith) fewerItemsVal else withoutItemOrWith
+                val fewerItemsWeight = knapsackWeights[i - 1][v]
+                val newWeight = Math.min(fewerItemsWeight, withoutItemOrWith)
                 knapsackWeights[i][v] = newWeight
             }
         }

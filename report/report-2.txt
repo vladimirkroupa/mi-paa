@@ -1,0 +1,172 @@
+====== Specifikace úlohy ======
+Řešíme úlohu [[tutorials:batoh|0/1 problém batohu]]. Jsou zadány velikosti problémů **n** ∈ {4, 10, 15, 20, 22, 25, 27, 30, 32, 35, 37, 40}, kde n je počet předmětů. Ke každé velikosti n instance máme sadu dat po 50 instancích. Pro každou instanci známe hodnotu jejího optimálního řešení (kde hodnotou se rozumí celková hodnota věcí v batohu).
+
+Použijeme:
+  * metodu větví a hranic (B&B) v aproximační variantě
+  * metodu dynamického programování s dekompozicí podle kapacity 
+  * metodu dynamického programování s dekompozicí podle ceny s aproximací cen (FPTAS algoritmus)
+
+Budeme srovnávat výpočetní časy jednotlivých metod. U metody větví a hranic budeme pozorovat velikost a vývoj relativní chyby. U FPTAS algoritmu budeme srovnávat naměřenou relativní chybu s předpokládanou relativní chybou.
+
+====== Řešení metodou větví a hranic (B&B), aproximační varianta ======
+
+===== Kostra algoritmu =====
+
+dle [1]
+
+  - (Inicializace)
+    - Seřaď předměty sestupně podle poměru cena/váha
+    - První uzel obsahuje prázdnou množinu věcí uvnitř a prázdnou množinu zamítnutých věcí
+  - (Rekurze)
+    - pokud počet věcí v batohu + počet zamítnutých věcí je roven počtu všech věcí, je tento uzel řešení
+    - vyber pivot
+      - pivot je první věc ze seřazeného seznamu věcí v poměru cena/váha, která není v aktuálním batohu a zároveň není v množině zamítnutých věcí
+    - vytvoř uzel U<sub>i</sub> přidání pivotu do batohu aktuálního uzlu
+    - vytvoř uzel U<sub>e</sub> přidání pivotu do seznamu zamítnutých věcí aktuálního uzlu
+    - spočítej horní mez obou uzlů cenovou funkcí
+    - pokračuj rekurzí uzlem s vyšší hodnotou horní meze
+
+==== Cenová funkce ====
+
+  - pokud je celková váha věcí v batohu vyšší, než kapacita v batohu, vrať -∞
+  - součet = 0
+  - pro všechny věci v pořadí dle klesajícího
+    - pokud se věc nenachází v batohu ani v množině zamítnutých věcí
+      - pokud v batohu zbývá místo na celou věc
+        - pak součet = součet + cena věci
+      - jinak součet = součet + hodnota věci * (zbývající kapacita batohu / hmotnost věci)
+
+==== Naměřené výsledky, interpretace ====
+
+{{:student:kroupvla:b_b-max-time.png|}}
+
+Relativní chyba u B&B algoritmu je daná zvolenou cenovou funkcí pro výpočet horní meze, kde byla použita heuristika poměru ceny/váhy. Relativní chyba řešení odpovídá relativní chybě heuristické metody s touto heuristikou (viz úloha 1).
+
+{{:student:kroupvla:b_b-err.png|}}
+
+====== Řešení metodou dynamického programování s dekompozicí podle kapacity ======
+
+Budeme postupovat **bottom-up**, tj. budeme z optimálních řešení pro menší dekomponované problémy skládat větší problémy. Jako datovou strukturu použijeme tabulku s **n** řádky, kde každý řádek reprezentuje problém vzniklý z původního problému použitím **i** prvních věcí, i ∈ <0..n>. Tabulka má **C** sloupců, kde C je kapacita batohu. Každý sloupec reprezentuje batoh s kapacitou **w**, w ∈ <0..C>. Každý prvek tabulky reprezentuje optimální řešení problému pro i prvních věcí s batohem o kapacitě w. Hodnota řešení se nachází v pravém dolním rohu (i = n, w = C).
+
+===== Kostra algoritmu =====
+
+dle [2]
+
+=== Vypočítej tabulku hodnot (B) ===
+
+  - hodnoty prvního sloupce (w = 0) jsou samé nuly
+  - hodnoty prvního řádku (i = 0) jsou samé nuly
+  - pro i od 1 do n
+    - pro w od 1 do C
+      - vezmi věc v pořadí i
+      - pokud se věc vejde do aktuálního batohu s kapacitou w
+          - pokud je hodnota věci + hodnota o 1 menšího batohu s o 1 menším výběrem věcí (B[i - 1, w - 1]) větší, než hodnotě stejně velkého batohu s o 1 menším výběrem věcí [i - 1, w]
+            - pak hodnota aktuálního batohu je tato větší hodnota
+          -  jinak je hodnota aktuálního batohu rovna hodnotě stejně velkého batohu s o 1 menším výběrem věcí [i - 1, w]
+      - jinak je hodnota aktuálního batohu rovno hodnotě batohu, kde byl výběr věcí o 1 menší (B[i, w] = B[i - 1, w])
+
+=== Rekonstruuj z tabulky hodnot řešení ===
+  - nastav i = n, k = C (buňka tabulky zcela vpravo dole)
+  - pokud hodnota buňky na [i, k] se nerovná hodnotě buňky na [i - 1, k]
+    - označ i-tou věc jako součást řešení
+    - i = i - 1
+    - k = k - váha věci i
+  - jinak i = i - 1 
+
+==== Naměřené výsledky, interpretace ====
+
+{{:student:kroupvla:dp-cap.png|}}
+
+Z grafu závislosti času výpočtu na součinu kapacity batohu a velikosti instance vidíme lineární závislost. Zjevně platí předpokládaná složitost algoritmu O(n*C).
+
+{{:student:kroupvla:dp-cap-2.png|}}
+
+====== Řešení FPTAS algoritmem (modifikovaný algoritmus dynamického programování s dekompozicí podle ceny) ======
+
+===== Kostra algoritmu =====
+
+dle [3]
+
+Řešení dynamickým programováním dekompozicí podle ceny je obdobné řešení DP dekompozicí podle váhy, ale místo celkových hodnot batohů zapisujeme do tabulky hmotnosti batohů. Indexy sloupců (w) odpovídají cenám batohů (narozdíl od hmotností v předchozím případě). Indexy řádků i opět vyjadřují prvních i věcí v podproblému.
+
+Modifikace algoritmu na FPTAS spočívá v zaokrouhlení hodnot jednotlivých předmětů v instanci.
+
+=== Zaoukrouhli hodnoty věcí ===
+
+  - M je maximální hodnota věcí instance, M = max<sub>i ∈ I</sub>v<sub>i</sub>
+  - ų = ε * M / n
+  - v'<sub>i</sub> = ⌊v<sub>i</sub> / ų⌋ pro všechna i ∈ I
+
+=== Vypočítej tabulku vah (W) ===
+
+  - Vsum = součet hodnot všech věcí v instanci
+  - W[0, 0] = 0
+  - W[0, v] = ∞ pro v ∈ <1; V<sub>sum</sub>>
+  - pro i od 1 do (n - 1)
+    - vezmi věc v pořadí i
+    - pro v od 1 do V<sub>sum</sub>
+      - pokud v - v<sub>i</sub> (aktuální v - hodnota věci i) >= 0
+        - pak w<sub>a</sub> = W[i - 1, v - v<sub>i</sub>] + w<sub>i</sub> (váha věci i) (předpokládáme, že ∞ + w<sub>i</sub> = ∞)
+      - jinak w<sub>a</sub> = ∞ 
+      - w<sub>b</sub> = W[i - 1, v]
+      - W[i, v] = min(w<sub>a</sub>, w<sub>b</sub>) 
+    
+=== Rekonstruuj z tabulky vah řešení ===
+
+  - najdi hodnotu řešení v<sub>sol</sub> 
+    - v posledním řádku tabulky (i = n) najdi maximální index //v// takový, že W[n, v] ≤ M, kde M je kapacita batohu
+  - rekonstruuj vektor věcí
+    - v = v<sub>sol</sub> 
+    - pro i od (n - 1) do 1
+      - pokud váha W[i, v] != váze W[i - 1, v],
+        - pak věc i patří do batohu
+        - v = v - v<sub>i</sub> (hodnota věci i)
+
+==== Naměřené výsledky, interpretace ====
+
+Očekáváme relativní chybu maximálně ε (ε * 100 pro relativní chybu v %). 
+Vidíme, že pro všechny zvolené hodnoty ε toto platí - maximální relativní chyba v % je menší, než ε * 100.
+
+{{:student:kroupvla:fptas-max-err.png|}}
+
+Průměrná relativní chyba je výrazně nižší, kvalita FPTAS algoritmus je v průměru velmi dobrá.
+
+{{:student:kroupvla:fptas-avg-err.png|}}
+
+====== Srovnání doby běhu algoritmů ======
+
+Oba aproximační algoritmy (B&B i FPTAS) rostou s velikostí instance pomaleji, než algoritmus dynamického programování s dekompozicí podle váhy. To odpovídá obecným očekáváním, že u algoritmů vedoucích na optimální bude doba běhu růst s velikostí instance rychleji, než u aproximačních algoritmů.
+
+{{:student:kroupvla:all-max-time-compare.png|}}
+
+{{:student:kroupvla:all-avg-time-compare.png|}}
+
+====== Srovnání relativní chyby aproximačního B&B a FPTAS ======
+
+Maximální relativní chyba u B&B algoritmu dosahuje podstatně vyšších hodnot než u FPTAS agloritmu pro všechna měřená ε.
+
+{{:student:kroupvla:fptas-b_b-max-err.png|}}
+
+====== Interpretace výsledků ======
+
+Z naměřených dat pozorujeme, že B&B algoritmu v aproximační variantě má nejpomalejší růst doby běhu v závislosti na velikosti instance. Je to za cenu velké relativní chyby v porovnání s FPTAS algoritmem. I při hodnotě ε = 0.9 dosahuje FPTAS na testovacích datech znatelně nižší relativní chyby.
+
+Pro testovací data se jeví metoda dynamického programování s dekompozicí podle ceny jako méně vhodná v porovnání s metodou dyn. prog. s dekompozicí podle váhy, nicméně při modifikaci na FPTAS algoritmus metoda s dekompozicí podle ceny nabízí mírnější růst doby běhu za cenu mírné relativní chyby (zejména u větších instancí).
+
+====== Detaily měření ======
+
+Implementováno v jazyce Kotlin, měřeno na platformě JVM v. 1.8.0_101.
+
+Měřeno na CPU i7-2630QM, OS Ubuntu Linux AMD64, kernel v. 3.19
+
+====== Zdrojový kód ======
+
+Maven projekt:
+
+{{:student:kroupvla:mi-paa-master-2.zip|}}
+
+====== Použitá literatura ======
+
+   - [[https://www0.gsb.columbia.edu/mygsb/faculty/research/pubfiles/4407/kolesar_branch_bound.pdf|Kolesar, Peter J. "A branch and bound algorithm for the knapsack problem." Management science 13.9 (1967): 723-735.]]
+   - [[http://cse.unl.edu/~goddard/Courses/CSCE310J/Lectures/Lecture8-DynamicProgramming.pdf|Goddard S. "Dynamic programming: 0-1 Knapsack problem" CSCE 310J - Data Structures & Algorithms handouts]]
+   - [[https://edux.fit.cvut.cz/courses/MI-PAA/homeworks/knapsack/dynprog|Dynamické programování - Domácí úlohy MI-PAA]]

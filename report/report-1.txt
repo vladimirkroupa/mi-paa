@@ -1,0 +1,98 @@
+====== Specifikace úlohy ======
+Řešíme úlohu [[tutorials:batoh|0/1 problém batohu]] exaktně (hrubou silou) a heuristikou podle poměru cena/váha. 
+
+Jsou zadány velikosti problémů **n** ∈ {4, 10, 15, 20, 22, 25, 27, 30, 32, 35, 37, 40}, kde n je počet předmětů. Ke každé velikosti n instance máme sadu dat po 50 instancích. Pro každou instanci známe hodnotu jejího optimálního řešení (kde hodnotou se rozumí celková hodnota věcí v batohu).
+
+Pokusíme se o empirické zjištění závislosti doby běhu alogritmu na velikosti instance v sadě (**n**) a o pozorování vývoje relativních chyb u heuristického řešení.
+
+====== Řešení hrubou silou ======
+
+===== Kostra algoritmu =====
+
+  - Pro aktuální batoh:
+    - Pokud je hodnota aktuálního batohu vyšší, než hodnota batohu s doposud nejvyšší nalezenou hodnotou, zapamatovat batoh
+    - Pro všechny zbývající věci (pouze ty, které jsou v pořadí za poslední věcí ze seznamu věcí, která už je v batohu) - vyhýbáme se duplikaci stavů
+      - Pokud se věc vejde do batohu, přidat
+        - rekurze    
+    - Vrátit batoh s nejvyšší nalezenou hodnotou, pokud existuje
+
+===== Naměřené výsledky, interpretace =====
+
+Pro každou velikost instance n ve zkušební sadě spouštíme algoritmus v cyklu pro všech 50 instancí. Z celkového doby běhu pro 50 instancí spočteme hodnotu průměrné doby běhu algoritmu pro konkrétní velikost instance.
+
+Pro velikosti instancí od 25 výše je již doba běhu algoritmu neúnosná, pro tyto instance tudíž nemáme data.
+
+Vidíme, že body reprezentující doby běhu algoritmu lze prožit přímkou. Časová osa Y je logaritmická, tudíž jsme demonstrovali, že závislost výpočetního času na velikosti instance je exponenciální. To souhlasí s naším očekáváním o výpočetní složitosti řešení hrubou silou.
+
+{{:student:kroupvla:bf2.png|}}
+
+==== Data ====
+
+^n	^avg(t)   ^
+|4	|0.004 s  |
+|10	|0.513 s  |
+|15	|34.16 s  |
+|20	|1244 s   |
+|22	|4919 s	  |
+|30     |   -     |
+
+====== Řešení heuristikou ======
+
+===== Kostra algoritmu =====
+
+  - Pro aktuální batoh:
+    - Pro všechny věci, co doposud nejsou v batohu spočítej poměr cena/váha
+    - Seřaď věci sestupně podle poměru
+    - Vyber v seřazeném seznamu první věc, která se vejde do batohu
+       - Přidej věc do batohu
+          - rekurze
+       - Pokud se žádná nevejde, řešením je aktuální batoh
+
+===== Naměřené výsledky, interpretace =====
+
+Měření doby běhu algoritmu provádíme stejně, jako u řešení hrubou silou.
+
+Závislost výpočetního času na velikosti instance u heuristického řešení můžeme empiricky pozorovat jako kvadratickou.
+
+{{:student:kroupvla:heur-t1.png|}}
+
+Díky znalosti hodnoty optimálního řešení dokážeme pro každou sadu instancí velikosti n spočítat průměrnou chybu heuristického řešení. Pozorujeme pro každou velikost instance maximální relativní chybu v dané sadě 50 instancí a průměrnou relativní chybu pro konkrétní sadu instancí.
+
+Maximální i relativní chyba heuristického řešení se s velikostí instance snižuje. Největší je u instancích malé velikosti.
+
+{{:student:kroupvla:heur-tb.png|}}
+
+==== Data ====
+
+^n	    ^avg(t)             ^max. rel. err %	^avg. rel. err % ^
+|4	    |0.0045 s	        |36.36	        |2.17         |
+|10	    |0.0134 s	        |11.48	        |1.29         |
+|15	    |0.0117 s	        |8.54	        |0.48         |
+|20	    |0.0205 s	        |8.43	        |0.6          |
+|22	    |0.0234 s	        |7.23	        |0.69         |
+|25	    |0.0501 s	        |3.68	        |0.49         |
+|27	    |0.0372 s	        |10.6	        |0.5          |
+|30	    |0.0478 s	        |5.51	        |0.51         |
+|32	    |0.0564 s	        |3.34	        |0.34         |
+|35	    |0.0692 s	        |4.61	        |0.28         |
+|37	    |0.0791 s	        |8.2	        |0.34         |
+|40	    |0.0973 s	        |2.34	        |0.2          |
+
+====== Závěr ======
+
+Empiricky jsme demonstrovali, že složitost řešení problému batohu hrubou silou je exponenciální. Složitost heuristického řešení poměrem cena/váha jsme demonstrovali jako kvadratickou.
+Heuristické řešení má řádově nižší složitost, ale nevede na optimální řešení. Proto jsme pomocí měření maximální a průměrné relativní chyby heuristického řešení zjištovali, nakolik je heuristika kvalitní.  Zjistili jsme, že kvalita heuristiky roste se zvyšující se velikostí instancí problému. 
+
+Vzhledem k neúnosné době běhu exaktního algoritmu pro větší velikosti instancí a pro vysokou relativní chybu heuristického řešení pro malé instance se pro praktické použití nabízí kombinovat oba přístupy. Pro problémy malé velikosti (limit velikosti by bylo nutné stanovit vzhledem ke kontextu použití) by exaktní algoritmus nabídl optimální řešení, pro větší instance by heuristický algoritmus dodal v malém čase řešení s akceptovatelnou odchylkou od optima.
+
+====== Detaily měření ======
+
+Implementováno v jazyce Kotlin, měřeno na platformě JVM v. 1.8.0_101.
+
+Měřeno na CPU i7-2630QM, OS Ubuntu Linux AMD64, kernel v. 3.19
+
+====== Zdrojový kód ======
+
+Maven projekt:
+
+{{:student:kroupvla:mi-paa-master.zip|}}
